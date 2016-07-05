@@ -35,7 +35,7 @@ class MySqlWatch(object):
         try:
             status = subprocess.check_output(
                 ['mysql', '-e', '"show slave status\G"'],
-                shell=True
+                shell=True,
                 stderr=subprocess.STDOUT,
                 )
         except subprocess.CalledProcessError as e:
