@@ -34,8 +34,7 @@ class MySqlWatch(object):
         """
         try:
             status = subprocess.check_output(
-                ['mysql', '-e', '"show slave status\G"'],
-                shell=True,
+                ['mysql', '-e', 'show slave status\G'],
                 stderr=subprocess.STDOUT,
                 )
         except subprocess.CalledProcessError as e:
@@ -50,14 +49,14 @@ class MySqlWatch(object):
         Parse the status text returned by the MySQL server into a dict
         """
         status_dict = {}
-        for line in status_text.strip().split("\n"):
+        for line in status_text.decode('utf-8').strip().split("\n"):
             try:
                 (key, value) = line.strip().split(":", 1)
             except ValueError:
                 # There was no colon (:) in `line`, so ignore it
                 pass
             else:
-                status_dict[key] = value
+                status_dict[key.strip()] = value.strip()
         return status_dict
 
 
