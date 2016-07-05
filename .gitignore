@@ -1,0 +1,17 @@
+#python specific
+*.pyc
+
+## generic files to ignore
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+
+# specific files
+static/mrc_crm/css/a11ycharts.css
+static/mrc_crm/js/a11ycharts.js
+static/mrc_crm/js/jquery.stickytableheaders.min.js
+static/mrc_crm/js/jquery.stickytableheaders.js
+static/mrc_crm/js/jquery.checkboxes.js
+static/mrc_crm/js/jquery.checkboxes.min.js
