@@ -23,8 +23,8 @@ class MySqlWatch(object):
             print("The MySQL Slave Server is not replicating!\n")
             print(" Slave IO Running: %s" % status['Slave_IO_Running'])
             print("Slave SQL Running: %s" % status['Slave_SQL_Running'])
-            print("\nLast Error:  %s" % status['Last_Error'])
-            print("\nLast SQL Error: %s" % status['Last_SQL_Error'])
+            print("\nLast Error:\n%s" % status['Last_Error'])
+            print("\nLast SQL Error:\n%s" % status['Last_SQL_Error'])
             print("")
 
 
