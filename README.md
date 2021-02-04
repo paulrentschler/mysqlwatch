@@ -1,5 +1,6 @@
 # MySQL Watch
 
+![Python 3][python-badge]
 [![MIT licensed][mit-badge]][mit-link]
 
 A watchdog to monitor whether or not a MySQL replica server is receiving data
@@ -39,7 +40,7 @@ The script is designed to be run on a regular basis via something like Cron. As 
 
 ## Terminology
 
-The author recognizes that the terms used by the MySQL software to describe the server roles in replication, "master" and "slave", are technical accurate but racially insensitive and generally in appropriate.
+The author recognizes that the terms used by the MySQL software to describe the server roles in replication, "master" and "slave", are technical accurate but racially insensitive and generally inappropriate.
 
 Wherever possible, the more modern and culturally sensitive terms "primary" and "replica" are used in this project.
 
@@ -49,10 +50,11 @@ Wherever possible, the more modern and culturally sensitive terms "primary" and 
 [MIT][mit-link]
 
 
-## Author Information
+## Author
 
 Created by Paul Rentschler in 2016.
 
 
 [mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
 [mit-link]: https://github.com/paulrentschler/mysqlwatch/blob/master/LICENSE
+[python-badge]: https://img.shields.io/badge/python-3.x-blue
