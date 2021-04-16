@@ -41,7 +41,7 @@ class MySqlWatch(object):
                     stderr=subprocess.STDOUT,
                 )
             except subprocess.CalledProcessError as e:
-                if e.returncode == 1 and "right syntax to use near 'replica status' at line 1" in e.output:  # NOQA
+                if e.returncode == 1 and "right syntax to use near \'REPLICA STATUS\' at line 1" in str(e.output):  # NOQA
                     self.use_replica = False
                     return self._get_status()
                 print(e)
