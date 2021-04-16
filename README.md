@@ -9,17 +9,16 @@ from the primary server.
 
 ## What it's checking
 
-The script executes the `SHOW SLAVE STATUS` command in the MySQL client and
-checks that the `Slave_IO_Running` and `Slave_SQL_Running` values are both `Yes`.
+The script executes the `SHOW REPLICA STATUS` command in the MySQL client and checks that the `Replica_IO_Running` and `Replica_SQL_Running` values are both `Yes`.
+
+The code falls back to the older `SHOW SLAVE STATUS` command and `Slave_IO_Running` and `Slave_SQL_Running` values for older versions of MySQL that do not support the more modern terminology.
 
 
 ## Output
 
 When the replica is properly replicating from the primary, there is no output from the watchdog.
 
-If `Slave_IO_Running` or `Slave_SQL_Running` report `No` then the values of
-each of these are output along with the values for `Last_Error` and
-`Last_SQL_Error`.
+If `Replica_IO_Running` or `Replica_SQL_Running` report `No` then the values of each of these are output along with the values for `Last_Error` and `Last_SQL_Error`.
 
 
 ## Dependencies
@@ -40,7 +39,7 @@ The script is designed to be run on a regular basis via something like Cron. As 
 
 ## Terminology
 
-The author recognizes that the terms used by the MySQL software to describe the server roles in replication, "master" and "slave", are technical accurate but racially insensitive and generally inappropriate.
+The author recognizes that the terms used by the MySQL software to describe the server roles in replication, "master" and "slave", are technical accurate but racially insensitive and generally inappropriate. The author further recognizes and appreciates the MySQL community's efforts to address this issue and replace "slave" with "replica".
 
 Wherever possible, the more modern and culturally sensitive terms "primary" and "replica" are used in this project.
 

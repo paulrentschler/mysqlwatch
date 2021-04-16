@@ -8,6 +8,8 @@ import subprocess
 
 
 class MySqlWatch(object):
+    use_replica = True
+
     def check(self):
         """Initiates the check to see if the replica is working properly"""
         status_text = self._get_status()
@@ -15,26 +17,46 @@ class MySqlWatch(object):
             print('Failed to get the status of the MySQL server!')
             return
         status = self._parse_status(status_text)
-        replica_io_error = status['Slave_IO_Running'] != 'Yes'
-        replica_sql_error = status['Slave_SQL_Running'] != 'Yes'
+        io_running_index = 'Replica_IO_Running'
+        sql_running_index = 'Replica_SQL_Running'
+        if not self.use_replica:
+            io_running_index = 'Slave_IO_Running'
+            sql_running_index = 'Slave_SQL_Running'
+        replica_io_error = status[io_running_index] != 'Yes'
+        replica_sql_error = status[sql_running_index] != 'Yes'
         if replica_io_error or replica_sql_error:
             print('The MySQL Replica server is not replicating!\n')
-            print(' IO Running: {}'.format(status['Slave_IO_Running']))
-            print('SQL Running: {}'.format(status['Slave_SQL_Running']))
+            print(' IO Running: {}'.format(status[io_running_index]))
+            print('SQL Running: {}'.format(status[sql_running_index]))
             print('\nLast Error:\n{}'.format(status['Last_Error']))
             print('\nLast SQL Error:\n{}'.format(status['Last_SQL_Error']))
             print('')
 
     def _get_status(self):
         """Returns the replication status of the MySQL server"""
-        try:
-            return subprocess.check_output(
-                ['mysql', '-e', 'SHOW SLAVE STATUS\\G'],
-                stderr=subprocess.STDOUT,
-            )
-        except subprocess.CalledProcessError as e:
-            print(e)
-            return False
+        if self.use_replica:
+            try:
+                return subprocess.check_output(
+                    ['mysql', '-e', 'SHOW REPLICA STATUS\\G'],
+                    stderr=subprocess.STDOUT,
+                )
+            except subprocess.CalledProcessError as e:
+                if e.returncode == 1 and "right syntax to use near 'replica status' at line 1" in e.output:  # NOQA
+                    self.use_replica = False
+                    return self._get_status()
+                print(e)
+                print(e.output)
+                return False
+        else:
+            try:
+                return subprocess.check_output(
+                    ['mysql', '-e', 'SHOW SLAVE STATUS\\G'],
+                    stderr=subprocess.STDOUT,
+                )
+            except subprocess.CalledProcessError as e:
+                print(e)
+                print(e.output)
+                return False
 
     def _parse_status(self, status_text):
         """Parse the status text returned by the MySQL server into a dict
